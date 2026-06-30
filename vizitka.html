@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ирина Скрябина — Эксперт по маркетингу</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --deep-navy: #0a0e1a;
+      --navy: #111827;
+      --accent-gold: #c9a84c;
+      --accent-light-gold: #e8c97a;
+      --accent-warm: #d4956a;
+      --white: #ffffff;
+      --soft-white: #f0ece4;
+      --text-muted: #8a8fa8;
+      --card-bg: #141929;
+      --glass: rgba(255,255,255,0.05);
+      --glass-border: rgba(201,168,76,0.2);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--deep-navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── Animated background ── */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 20% 30%, #1a1040 0%, transparent 55%),
+                  radial-gradient(ellipse at 80% 70%, #0d1e35 0%, transparent 55%),
+                  var(--deep-navy);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.35;
+      animation: drift 8s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, #6c3fa0, transparent 70%);
+      top: -80px; left: -60px;
+      animation-duration: 9s;
+    }
+    .orb-2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, #c9a84c55, transparent 70%);
+      bottom: 60px; right: -40px;
+      animation-duration: 11s;
+      animation-delay: -3s;
+    }
+    .orb-3 {
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, #1a4a7a, transparent 70%);
+      top: 50%; left: 60%;
+      animation-duration: 13s;
+      animation-delay: -6s;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.08); }
+    }
+
+    /* ── Floating particles ── */
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: rise var(--dur, 8s) linear var(--delay, 0s) infinite;
+    }
+    @keyframes rise {
+      0%   { opacity: 0; transform: translateY(0) scale(1); }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(-100vh) scale(0.4); }
+    }
+
+    /* ── Layout ── */
+    .page-wrapper {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 48px 40px 44px;
+      text-align: center;
+      box-shadow:
+        0 0 0 1px rgba(201,168,76,0.08),
+        0 24px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: cardIn 1s cubic-bezier(0.22,1,0.36,1) both;
+      position: relative;
+      overflow: hidden;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(40px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* top shimmer line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 1; }
+    }
+
+    /* ── Photo ── */
+    .photo-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+
+    .photo-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--accent-gold), var(--accent-warm), #9b5fe0, var(--accent-gold)
+      );
+      animation: spin 6s linear infinite;
+      z-index: 0;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .photo-ring-mask {
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      z-index: 1;
+    }
+
+    .photo-img {
+      position: relative;
+      z-index: 2;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #2a1f4a, #1a304a);
+    }
+
+    /* Placeholder icon when no photo */
+    .photo-placeholder {
+      position: relative;
+      z-index: 2;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2a1f4a 0%, #1a304a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      color: var(--accent-gold);
+      opacity: 0.9;
+    }
+
+    /* ── Name ── */
+    .name {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, var(--soft-white) 30%, var(--accent-light-gold) 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+      animation: fadeUp 0.8s 0.3s both;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+      margin: 14px auto 18px;
+      animation: fadeUp 0.8s 0.45s both;
+    }
+
+    /* ── Expertise ── */
+    .expertise {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--soft-white);
+      opacity: 0.88;
+      font-style: italic;
+      max-width: 340px;
+      margin: 0 auto 28px;
+      animation: fadeUp 0.8s 0.55s both;
+    }
+
+    /* ── Tags ── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 32px;
+      animation: fadeUp 0.8s 0.65s both;
+    }
+    .tag {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(201,168,76,0.35);
+      background: rgba(201,168,76,0.07);
+      color: var(--accent-light-gold);
+      transition: all 0.25s ease;
+    }
+    .tag:hover {
+      background: rgba(201,168,76,0.18);
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    /* ── CTA Button ── */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #c9a84c 0%, #e8c97a 50%, #c9a84c 100%);
+      background-size: 200% 200%;
+      color: #0a0e1a;
+      font-family: 'Arial', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s 0.75s both, bgShift 3s ease infinite;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow:
+        0 4px 24px rgba(201,168,76,0.4),
+        0 1px 0 rgba(255,255,255,0.3) inset;
+    }
+
+    @keyframes bgShift {
+      0%, 100% { background-position: 0% 50%; }
+      50%       { background-position: 100% 50%; }
+    }
+
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+    .cta-btn:hover::after {
+      transform: translateX(100%);
+    }
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow:
+        0 8px 36px rgba(201,168,76,0.55),
+        0 1px 0 rgba(255,255,255,0.3) inset;
+    }
+    .cta-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .tg-icon {
+      width: 22px; height: 22px;
+      flex-shrink: 0;
+    }
+
+    /* ── Social link ── */
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: color 0.2s ease;
+      animation: fadeUp 0.8s 0.85s both;
+    }
+    .social-link:hover {
+      color: var(--accent-gold);
+    }
+    .social-link svg {
+      width: 16px; height: 16px;
+      opacity: 0.6;
+    }
+    .social-link:hover svg {
+      opacity: 1;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Pulse dot (live indicator) ── */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #5eba7d;
+      margin-bottom: 20px;
+      animation: fadeUp 0.8s 0.2s both;
+    }
+    .pulse-dot {
+      width: 7px; height: 7px;
+      background: #5eba7d;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(94,186,125,0.6); }
+      50%       { box-shadow: 0 0 0 6px rgba(94,186,125,0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .card { padding: 40px 24px 36px; }
+      .name { font-size: 1.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg-canvas">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Card -->
+  <div class="page-wrapper">
+    <div class="card">
+
+      <!-- Photo -->
+      <div class="photo-wrap">
+        <div class="photo-ring"></div>
+        <div class="photo-ring-mask"></div>
+        <img src="photo.jpeg" alt="Ирина Скрябина" class="photo-img" />
+      </div>
+
+      <!-- Name -->
+      <h1 class="name">Ирина Скрябина</h1>
+
+      <!-- Divider -->
+      <div class="divider"></div>
+
+      <!-- Expertise -->
+      <p class="expertise">
+        Эксперт в маркетинге, монетизации базы<br />
+        и заработке через нейросети
+      </p>
+
+      <!-- Tags -->
+      <div class="tags">
+        <span class="tag">Маркетинг</span>
+        <span class="tag">Монетизация</span>
+        <span class="tag">Нейросети</span>
+        <span class="tag">AI-стратегии</span>
+      </div>
+
+      <!-- CTA -->
+      <a class="cta-btn" href="https://t.me/IrinaSkryabina" target="_blank" rel="noopener">
+        <svg class="tg-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 2L11 13" stroke="#0a0e1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0a0e1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Напишите мне
+      </a>
+
+      <br />
+
+      <!-- Social -->
+      <a class="social-link" href="https://t.me/ia_skryabina" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.288 14.42l-2.948-.924c-.64-.203-.653-.64.136-.95l11.527-4.447c.534-.194 1.001.13.559.062z"/>
+        </svg>
+        t.me/ia_skryabina
+      </a>
+
+    </div>
+  </div>
+
+  <script>
+    // Spawn floating particles
+    const container = document.getElementById('particles');
+    const count = 40;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.cssText = `
+        left: ${Math.random() * 100}%;
+        bottom: ${Math.random() * -20}%;
+        --dur: ${6 + Math.random() * 10}s;
+        --delay: ${-Math.random() * 12}s;
+        width: ${1 + Math.random() * 2.5}px;
+        height: ${1 + Math.random() * 2.5}px;
+        opacity: 0;
+      `;
+      container.appendChild(p);
+    }
+
+    // Tilt effect on card
+    const card = document.querySelector('.card');
+    document.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (window.innerWidth / 2);
+      const dy = (e.clientY - cy) / (window.innerHeight / 2);
+      card.style.transform = `perspective(900px) rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg)`;
+    });
+    document.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg)';
+      card.style.transition = 'transform 0.6s ease';
+    });
+    document.addEventListener('mousemove', () => {
+      card.style.transition = 'transform 0.1s ease';
+    });
+  </script>
+
+</body>
+</html>
